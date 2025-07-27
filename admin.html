@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel Administracyjny Aukcji: {{ auction.item }}{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <style>
+  .banner {
+      position: relative;
+      margin-bottom: 20px;
+    }
+  .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+  .overlay-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      z-index: 10;
+      padding: 0 15px;
+    }
+  .nav-tabs.nav-fill.nav-link {
+      white-space: nowrap;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="banner">
+    <img src="{{ session.get('banner_image', url_for('static', filename='images/banner.jpg')) }}" alt="Banner">
+    <div class="overlay-content">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <ul class="nav nav-tabs nav-fill" id="adminTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="true">
+                  Ustawienia Aukcji
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="invitations-tab" data-bs-toggle="tab" data-bs-target="#invitations" type="button" role="tab" aria-controls="invitations" aria-selected="false">
+                  Zaproszenia
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history" type="button" role="tab" aria-controls="history" aria-selected="false">
+                  Historia Ofert
+                </button>
+              </li>
+            </ul>
+
+            <div class="tab-content" id="adminTabContent">
+              <div class="tab-pane fade show active" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                <div class="card mt-3">
+                  <div class="card-header text-center">
+                    <h4>{{ auction.item }}</h4>
+                  </div>
+                  <div class="card-body">
+                    <form id="auctionForm" method="POST" action="/admin/{{ auction.auction_id }}">
+                      <div class="mb-3">
+                        <label for="item" class="form-label">Przedmiot aukcji</label>
+                        <input type="text" id="item" name="item" class="form-control" value="{{ auction.item }}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="startingPrice" class="form-label">Cena wywoławcza (zł)</label>
+                        <input type="number" id="startingPrice" name="startingPrice" class="form-control" value="{{ auction.startingPrice }}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="duration" class="form-label">Czas trwania aukcji (sekundy)</label>
+                        <input type="number" id="duration" name="duration" class="form-control" value="{{ auction.duration }}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="startTime" class="form-label">Data i godzina startu aukcji</label>
+                        <input type="datetime-local" id="startTime" name="startTime" class="form-control" value="{{ auction.startTime | datetimeformat }}" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="minIncrement" class="form-label">Minimalne postąpienie (zł)</label>
+                        <input type="number" id="minIncrement" name="minIncrement" class="form-control" value="{{ auction.minIncrement }}">
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                          <button type="submit" class="btn w-100" data-bs-toggle="tooltip" title="Zapisz zmiany">
+                            <i class="fas fa-save fa-2x"></i>
+                          </button>
+                        </div>
+                        <div class="col-4">
+                          <button type="button" onclick="resetAuction('{{ auction.auction_id }}')" class="btn w-100" data-bs-toggle="tooltip" title="Zresetuj aukcję">
+                            <i class="fas fa-undo fa-2x"></i>
+                          </button>
+                        </div>
+                        <div class="col-4">
+                          <button type="button" onclick="endAuction('{{ auction.auction_id }}')" class="btn w-100" data-bs-toggle="tooltip" title="Zakończ aukcję">
+                            <i class="fas fa-stop fa-2x"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="invitations" role="tabpanel" aria-labelledby="invitations-tab">
+                <div class="card mt-3">
+                  <div class="card-header text-center">
+                    <h4>Generuj zaproszenie</h4>
+                  </div>
+                  <div class="card-body">
+                    <div class="mb-3">
+                      <label for="invite_user" class="form-label">Nazwa użytkownika</label>
+                      <input type="text" id="invite_user" class="form-control" placeholder="Wprowadź nazwę">
+                    </div>
+                    <button type="button" onclick="generateInvitation('{{ auction.auction_id }}')" class="btn w-100" data-bs-toggle="tooltip" title="Generuj Zaproszenie">
+                      <i class="fas fa-user-plus fa-2x"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card mt-3">
+                  <div class="card-header text-center">
+                    <h4>Lista zaproszonych użytkowników</h4>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-group">
+                      {% if auction.invited_users %}
+                        {% for token, user in auction.invited_users.items() %}
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ user }}
+                            <input type="text" value="http://127.0.0.1:4000/auction/{{ auction.auction_id }}/{{ token }}" class="form-control-sm" readonly>
+                          </li>
+                        {% endfor %}
+                      {% else %}
+                        <li class="list-group-item">
+                          Wygeneruj zaproszenie, aby zobaczyć zaktualizowaną listę użytkowników.
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                <div class="card mt-3">
+                  <div class="card-header text-center">
+                    <h4>Historia ofert</h4>
+                  </div>
+                  <div class="card-body">
+                    <ul class="list-group">
+                      {% if auction.bids %}
+                        {% for bid in auction.bids %}
+                          <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ bid.bidder }}: {{ bid.price }} zł
+                          </li>
+                        {% endfor %}
+                      {% else %}
+                        <li class="list-group-item">
+                          Historia ofert pojawi się po rozpoczęciu aukcji.
+                        </li>
+                      {% endif %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+            </div> </div> </div> </div> </div> </div> {% endblock %}
+
+{% block scripts %}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% endblock %}

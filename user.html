@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Aukcja: {{ auction.item }}</title>
+
+  <!-- Bootswatch (Flatly) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.0/dist/flatly/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+
+  <!-- Czcionka Urbanist -->
+  <link href="https://fonts.googleapis.com/css2?family=Urbanist&display=swap" rel="stylesheet">
+
+  <!-- Wspólne pliki CSS (index.css oraz footer.css) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/footer.css') }}">
+
+  <!-- Socket.IO -->
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+  <!-- Dodatkowy CSS do pozycjonowania banneru i overlay -->
+  <style>
+    .banner {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .overlay-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100%;
+      z-index: 10;
+      padding: 0 15px;
+    }
+  </style>
+</head>
+<body>
+  {% include 'navbar_user.html' %}
+
+  <!-- Banner z obrazkiem oraz overlay z treścią aukcji -->
+  <div class="banner">
+    <!-- Pobieramy obraz banneru z sesji lub używamy domyślnego obrazu -->
+    <img src="{{ session.get('banner_image', url_for('static', filename='images/banner.jpg')) }}" alt="Banner">
+    <div class="overlay-content">
+      <div class="container">
+        <!-- Wiersz wyśrodkowany, zawierający kolumnę col-md-4 (taką samą szerokość jak w index.html) -->
+        <div class="row justify-content-center">
+          <div class="col-md-4">
+            <!-- Karta z informacjami o aukcji -->
+            <div class="card mb-4">
+              <div class="card-body text-center">
+                <h3 class="card-title mb-4">{{ auction.item }}</h3>
+                <div class="row">
+                  <div class="col-md-6 text-start">
+                    <p class="card-text">Cena wywoławcza: {{ auction.startingPrice }} zł</p>
+                    <p class="card-text">Minimalne postąpienie: {{ auction.minIncrement }} zł</p>
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <p id="lowestBid" class="card-text">
+                      Najniższa oferta: {{ auction.lowestBid.price if auction.lowestBid else 'Brak ofert' }} zł
+                    </p>
+                    <p id="timer" class="badge">Pozostały czas: --:--</p>
+                  </div>
+                </div>
+                <p id="myRank" class="mt-3">Twoja pozycja: --</p>
+              </div>
+            </div>
+
+            <!-- Karta do składania oferty -->
+            <div class="card mb-4">
+              <div class="card-body text-center d-flex flex-column align-items-center">
+                <div class="mb-3 d-flex justify-content-center">
+                  <input type="number" id="bidInput" class="form-control text-center" placeholder="Twoja oferta">
+                </div>
+                <div class="mb-3">
+                  <button class="btn w-100" onclick="sendBid()">
+                    <i class="fas fa-money-bill-wave"></i> Złóż ofertę
+                  </button>
+                </div>
+                <p class="mt-3 small">
+                  Złożenie oferty oznacza akceptację <a class="regulamin-link" href="/auction-terms/{{ auction.auction_id }}/{{ token }}"><strong>regulaminu aukcji</strong></a>.
+                </p>
+              </div>
+            </div>
+          </div> <!-- end col-md-4 -->
+        </div> <!-- end row -->
+      </div> <!-- end container -->
+    </div> <!-- end overlay-content -->
+  </div> <!-- end banner -->
+
+  {% include 'footer.html' %}
+
+  <script>
+    const auctionStartTime = {{ auction.startTime }};
+    const auctionDuration = {{ auction.duration }};
+    const userToken = "{{ token }}";
+    const myName = "{{ user_name }}";
+    const auctionId = "{{ auction.auction_id }}";
+  </script>
+  <script src="{{ url_for('static', filename='js/user.js') }}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
