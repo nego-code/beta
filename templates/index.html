@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Nego{% endblock %}
+
+{% block content %}
+  <div class="banner">
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-header text-center">
+          <h4>Uzyskaj najniższą cenę</h4>
+        </div>
+        <div class="card-body text-center" id="auctionContent">
+          <p>
+            Nego to uniwersalne, przyjazne w obsłudze narzędzie do negocjacji, które pomaga w prosty
+            i intuicyjny sposób osiągnąć najniższą możliwą cenę – niezależnie od tego, co aktualnie negocjujesz.
+            Dzięki przejrzystym funkcjom i przyjemnemu interfejsowi, każdy może szybko i skutecznie
+            wypracować najlepsze warunki umowy bez zbędnego stresu czy skomplikowanych procedur.
+          </p>
+          <button id="newAuctionBtn" class="btn w-100" onclick="loadNewAuctionForm();">
+            <i class="fas fa-plus"></i> Nowa aukcja
+          </button>
+        </div>
+      </div>
+    </div>
+    <img src="{{ session.get('banner_image', url_for('static', filename='images/banner.jpg')) }}" alt="Banner">
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    function loadNewAuctionForm() {
+      console.log("Wywołano loadNewAuctionForm()");
+      var container = document.getElementById("auctionContent");
+      if (!container) return;
+      
+      fetch("/new-auction_ajax")
+      .then(response => {
+          if (!response.ok) {
+            throw new Error("Błąd sieciowy podczas pobierania formularza.");
+          }
+          return response.text();
+        })
+      .then(html => {
+          console.log("Otrzymano formularz:", html);
+          container.innerHTML = html;
+        })
+      .catch(error => {
+          console.error("Błąd przy ładowaniu formularza aukcji:", error);
+          alert("Wystąpił błąd podczas ładowania formularza aukcji.");
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (window.location.hash.indexOf("newAuction")!== -1) {
+        loadNewAuctionForm();
+      }
+    });
+  </script>
+{% endblock %}

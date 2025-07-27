@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist&display=swap');
+
+body {
+  background-color: #f5f5f7;
+  color: #333;
+  font-family: "Urbanist", sans-serif;
+}
+
+.container-fluid {
+  margin-top: 40px;
+}
+
+.card {
+  background-color: #fff;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-weight: bold;
+  color: #333;
+}
+
+.card-text {
+  font-size: 1rem;
+  color: #555;
+}
+
+/* Style dla timera – zmieniono czcionkę na Urbanist */
+#timer {
+  background-color: #eee;
+  color: #333;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  font-family: 'Urbanist', sans-serif;
+}
+
+/* Nadpisanie domyślnych stylów Bootswapa dla przycisków */
+.btn-primary,
+.btn-secondary,
+.btn-success,
+.btn-danger,
+.btn-warning,
+.btn-info,
+.btn-light,
+.btn-dark {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-success:hover,
+.btn-danger:hover,
+.btn-warning:hover,
+.btn-info:hover,
+.btn-light:hover,
+.btn-dark:hover {
+  background-color: #f5f5f7;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #0069d9;
+  text-decoration: underline;
+}
+
+/* Styl dla strong wewnątrz a */
+a strong {
+  color: black;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}

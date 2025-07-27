@@ -1,0 +1,54 @@
+/* navbar.css */
+
+/* Podstawowe style paska nawigacji */
+.navbar {
+  padding-top: 1rem !important;
+  padding-bottom: 1rem !important;
+  background-color: #ffffff !important;
+  font-family: 'Urbanist', sans-serif !important; 
+  height: 50px !important; 
+  display: flex !important; 
+  align-items: center !important; 
+}
+
+/* Kontener na elementy w nawigacji */
+.navbar-content {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+/* Klasa pomocnicza do centrowania pionowego (jeśli potrzebujesz) */
+.vertical-center {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Stylizacja nazwy marki (brand) */
+.navbar-brand {
+  font-family: 'Urbanist', sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important; 
+  color: #000000 !important;
+  text-transform: uppercase !important;
+  display: block !important;
+}
+
+/* POPRAWIONY SELEKTOR: 
+   Dla linków w nawigacji z klasą .navbar-light (bg-light)
+   tak, by wyświetlały się na czarno. */
+.navbar-light .navbar-nav .nav-link {
+  color: #000000 !important;
+  margin-left: 1rem !important;
+  font-size: 1rem !important;
+  font-weight: 500 !important;
+  font-family: 'Urbanist', sans-serif !important;
+}
+
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-nav .nav-link:focus {
+  color: #000000 !important;
+  text-decoration: none; 
+}

@@ -1,0 +1,147 @@
+/* --- admin.css --- */
+
+/* --- PALETA KOLORÓW --- */:root {
+    --primary-color: #007bff;
+    --primary-hover-color: #0056b3;
+    --secondary-color: #6c757d;
+    --secondary-hover-color: #545b62;
+    --accent-color: #17a2b8;
+    --accent-hover-color: #13849e;
+    --body-bg-color: #f8f9fa;
+    --text-color: #343a40;
+    --card-bg-color: #ffffff;
+    --card-border-color: #e0e0e0;
+    --list-border-color: #e0e0e0;
+    --link-color: #007bff;
+    --link-hover-color: #0056b3;
+}
+
+/* --- RESET STYLÓW --- */
+*,::before,::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- TYPOGRAFIA --- */
+body {
+    font-family: 'Open Sans', sans-serif; /* Użyj Open Sans */
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-color);
+    background-color: var(--body-bg-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    line-height: 1.4;
+}
+
+p {
+    margin-bottom: 1.4rem;
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover,
+a:focus {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+}
+
+/* --- WHITESPACE i LAYOUT --- */.container {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    max-width: 960px;
+    margin: 0 auto;
+}.mt-4 {
+    margin-top: 3rem!important;
+}.mt-3 {
+    margin-top: 2rem!important;
+}
+
+/* --- STYLIZACJA KOMPONENTÓW BOOTSTRAPA --- */
+
+/* Przyciski */.btn {
+    border-radius: 0.3rem;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.08);
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+}.btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.12);
+}.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}.btn-primary:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--primary-hover-color);
+}
+
+/* Karty */.card {
+    border-radius: 0.75rem;
+    border: none;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease-in-out;
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--card-border-color);
+}.card:hover {
+    transform: translateY(-5px);
+}.card-header {
+    background-color: var(--card-bg-color);
+    padding: 1.2rem 1.8rem;
+    border-bottom: none;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    border-bottom: 1px solid var(--card-border-color);
+}.card-body {
+    padding: 1.8rem;
+}.card-header h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0;
+}.card-body p {
+    margin-bottom: 1.5rem;
+    color: #555;
+}.btn-w-100 {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #ffffff;
+    border-radius: 0.5rem;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}.btn-w-100:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--primary-hover-color);
+    box-shadow: 0 0.3rem 0.7rem rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Listy */.list-group {
+    margin-top: 1.5rem;
+}.list-group-item {
+    border-color: var(--list-border-color);
+    padding: 1rem 1.5rem;
+    border-radius: 0.3rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 0.1rem 0.2rem rgba(0, 0, 0, 0.05);
+    background-color: var(--card-bg-color);
+}.list-group-item:last-child {
+    margin-bottom: 0;
+}.btn-sm {
+    border-radius: 0.3rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    box-shadow: none;
+}

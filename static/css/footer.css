@@ -1,0 +1,32 @@
+/* Stopka z takim samym stylem jak navbar */
+.footer {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background-color: #ffffff;
+  font-family: 'Urbanist', sans-serif;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid #e0e0e0;
+  width: 100%;
+  position: relative;
+  margin-top: 0; /* Usuwa dodatkową przestrzeń nad stopką */
+}
+
+/* Dopasowanie stylu zawartości stopki do nawigacji */
+.footer .navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Stylizacja tekstu stopki, dopasowana do menu */
+.footer .footer-text {
+  font-family: 'Urbanist', sans-serif;
+  font-size: 1rem;
+  color: #000000;
+  text-transform: none;
+  font-weight: normal;
+}
